@@ -1,0 +1,29 @@
+product_id,sku,product,category,units,revenue,gross_profit,margin_pct,revenue_share_pct,revenue_rank,profit_rank,abc_class
+13,AUD-TWS2,TWS Earbuds Model X2,Audio,3573,3119678.91,996805.71,32.0,12.0,1,1,A
+17,PWR-10K,Power Bank 10000mAh,Power banks,3727,3074460.36,249900.36,8.1,11.8,2,9,A
+1,CHG-C20,USB-C Fast Charger 20W,Chargers,8941,2957650.44,767105.44,25.9,11.3,3,2,A
+5,CBL-C1,Braided USB-C Cable 1m,Cables,23139,2275730.62,690709.12,30.4,8.7,4,4,A
+10,PRT-CASE,Silicone Phone Case (assorted),Phone protection,17990,1529940.88,720390.88,47.1,5.9,5,3,A
+2,CHG-C33,USB-C Fast Charger 33W,Chargers,2728,1442073.86,378153.86,26.2,5.5,6,6,A
+18,PWR-20K,Power Bank 20000mAh,Power banks,1004,1324569.72,112101.72,8.5,5.1,7,17,A
+14,AUD-NB5,Neckband Earphones N5,Audio,2153,1113867.56,295727.56,26.5,4.3,8,7,A
+23,STL-LBX,Steel Lunch Box 3-Tier,Kitchenware,3002,1031955.83,235302.83,22.8,4.0,9,11,A
+25,STL-KDI,Steel Kadai 2.5L,Kitchenware,1901,966486.22,207838.72,21.5,3.7,10,13,A
+24,STL-DIN,Steel Dinner Set (24 pc),Kitchenware,472,928237.29,230279.79,24.8,3.6,11,12,A
+9,PRT-TG,Tempered Glass Screen Guard,Phone protection,23493,867952.94,445078.94,51.3,3.3,12,5,A
+19,KIT-BTL1,Stainless Steel Water Bottle 1L,Kitchenware,3395,833706.87,205631.87,24.7,3.2,13,14,A
+16,AUD-SPK,Bluetooth Speaker Mini,Audio,1085,817387.89,253187.89,31.0,3.1,14,8,B
+20,KIT-MUG,Ceramic Coffee Mug 350ml,Kitchenware,7421,680873.06,142850.56,21.0,2.6,15,15,B
+6,CBL-LT1,USB-C to Lightning Cable 1m,Cables,2793,638873.31,247853.31,38.8,2.4,16,10,B
+21,KIT-JAR,Glass Storage Jar 1.5L,Kitchenware,2585,471690.89,109790.89,23.3,1.8,17,18,B
+22,KIT-TWL,Cotton Kitchen Towels (Set of 3),Kitchenware,2341,377359.95,96439.95,25.6,1.4,18,19,B
+11,ACC-STD,Aluminium Phone Stand,Accessories,2239,340793.55,128088.55,37.6,1.3,19,16,B
+4,CHG-CAR,Car Charger Dual USB,Accessories,1277,278962.73,87412.73,31.3,1.1,20,20,B
+12,ACC-STRP,Smartwatch Strap 22mm,Accessories,2388,209619.03,66339.03,31.6,0.8,21,21,C
+7,CBL-MU1,Micro-USB Cable 1m,Cables,4226,189296.56,54064.56,28.6,0.7,22,22,C
+15,AUD-WRD,Wired Earphones 3.5mm,Audio,1185,150235.26,49510.26,33.0,0.6,23,23,C
+3,CHG-MU10,Micro-USB Charger 10W,Chargers,799,127858.54,31978.54,25.0,0.5,24,26,C
+28,FST-THL,Brass Pooja Thali Set,Festive & gifting,260,125162.44,36762.44,29.4,0.5,25,25,C
+27,FST-CPB,Copper Bottle Gift Set,Festive & gifting,180,124961.23,38561.23,30.9,0.5,26,24,C
+26,FST-DIYA,Brass Diya Set (5 pc),Festive & gifting,281,84369.00,25359.00,30.1,0.3,27,27,C
+8,CBL-AUX,3.5mm AUX Cable 1m,Cables,533,21115.72,6191.72,29.3,0.1,28,28,C

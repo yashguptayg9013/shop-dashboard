@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop Owner Dashboard</title>
+<meta name="description" content="A year of a trading business's sales, stock and GST, worked out in PostgreSQL: sales trends, dead stock, reorder alerts, Diwali prep and a monthly GST summary.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f5f2; --surface: #ffffff; --surface-2: #f0eee9; --line: #e2dfd8;
+    --fg: #1b1a17; --muted: #6b675e; --accent: #0f6e5c; --accent-soft: #e3f1ed; --on-accent: #ffffff;
+    --grid: #e1e0d9; --axis: #c3c2b7; --tick: #77756e;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+    --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b; --neutral: #9a978e;
+    --good-ink: #006300; --bad-ink: #b42323;
+    --code-bg: #f3f2ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141412; --surface: #1c1c19; --surface-2: #262622; --line: #34332e;
+      --fg: #ecebe6; --muted: #a19d92; --accent: #3fb59b; --accent-soft: #15302a; --on-accent: #0c1714;
+      --grid: #2c2c2a; --axis: #45443f; --tick: #9a978e;
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+      --good-ink: #4cc38a; --bad-ink: #f07a7a; --code-bg: #20201d;
+    }
+  }
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #141412; --surface: #1c1c19; --surface-2: #262622; --line: #34332e;
+    --fg: #ecebe6; --muted: #a19d92; --accent: #3fb59b; --accent-soft: #15302a; --on-accent: #0c1714;
+    --grid: #2c2c2a; --axis: #45443f; --tick: #9a978e;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --good-ink: #4cc38a; --bad-ink: #f07a7a; --code-bg: #20201d;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body { background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 16px 48px; }
+
+  /* Header */
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; margin-bottom: 18px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 6px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  h1 { margin: 0; font-size: clamp(26px, 4vw, 36px); line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; }
+  .lede { margin: 8px 0 0; max-width: 640px; color: var(--muted); text-wrap: pretty; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; font-size: 14px; text-decoration: none; color: var(--fg); }
+  .btn:hover { border-color: var(--muted); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .btn svg { width: 16px; height: 16px; flex: none; }
+  .note { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 22px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--muted); font-size: 13.5px; }
+  .note b { color: var(--fg); font-weight: 600; }
+  .note svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
+
+  /* Sections */
+  h2 { margin: 0; font-size: 19px; line-height: 1.3; letter-spacing: -.005em; }
+  .section { margin-top: 34px; }
+  .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 12px; }
+  .section-head p { margin: 2px 0 0; color: var(--muted); font-size: 14px; max-width: 720px; text-wrap: pretty; }
+  .card { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .card-pad { padding: 16px 18px; }
+  .card h3 { margin: 0 0 2px; font-size: 15px; }
+  .card .sub { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* Insights */
+  .insights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; counter-reset: insight; }
+  @media (max-width: 900px) { .insights { grid-template-columns: 1fr; } }
+  .insight { position: relative; padding: 16px 18px 14px; display: flex; flex-direction: column; }
+  .insight::before { counter-increment: insight; content: counter(insight); display: inline-grid; place-items: center; width: 24px; height: 24px; margin-bottom: 10px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; }
+  .insight h3 { font-size: 16px; line-height: 1.3; margin-bottom: 6px; text-wrap: balance; }
+  .insight p { margin: 0 0 8px; font-size: 14px; color: var(--muted); text-wrap: pretty; }
+  .insight p strong { color: var(--fg); font-weight: 600; }
+  .insight .act { color: var(--fg); }
+  .insight .links { margin-top: auto; padding-top: 6px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; }
+
+  /* KPI tiles */
+  .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1000px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .kpi { padding: 13px 14px; }
+  .kpi .label { font-size: 12.5px; color: var(--muted); }
+  .kpi .value { margin-top: 2px; font-size: 24px; font-weight: 650; letter-spacing: -.01em; line-height: 1.2; }
+  .kpi .delta { margin-top: 2px; font-size: 12.5px; color: var(--muted); }
+  .delta .up { color: var(--good-ink); font-weight: 600; }
+  .delta .down { color: var(--bad-ink); font-weight: 600; }
+
+  /* Charts */
+  .chart { position: relative; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart text { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--tick); font-variant-numeric: tabular-nums; }
+  .chart text.lbl { fill: var(--fg); font-weight: 600; }
+  .chart .hit { fill: transparent; cursor: default; outline: none; }
+  .chart .hit:focus-visible { stroke: var(--accent); stroke-width: 1.5; }
+  .chart .col.dim { opacity: .55; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .legend i.line { width: 14px; height: 2px; border-radius: 1px; }
+  .tip { position: absolute; z-index: 5; pointer-events: none; min-width: 150px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 6px 20px rgba(0,0,0,.14); font-size: 12.5px; opacity: 0; transition: opacity .08s; }
+  .tip.on { opacity: 1; }
+  .tip .t { font-weight: 600; margin-bottom: 4px; }
+  .tip .r { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+  .tip .r span { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+  .tip .r span i { width: 12px; height: 2px; border-radius: 1px; display: inline-block; }
+  .tip .r b { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .tip .foot { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--line); color: var(--muted); }
+
+  /* Share bars */
+  .shares { display: grid; gap: 10px; }
+  .share-row { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 4px 12px; align-items: center; }
+  @media (max-width: 520px) { .share-row { grid-template-columns: 1fr; } }
+  .share-row .name { font-size: 13px; line-height: 1.25; }
+  .share-row .bars { display: grid; gap: 2px; }
+  .bar-line { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .bar-line .b { height: 10px; border-radius: 0 4px 4px 0; min-width: 2px; }
+  .bar-line .v { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .share-row.hl .name { font-weight: 650; }
+  .share-row.hl .v { color: var(--fg); font-weight: 600; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; background: var(--surface); position: sticky; top: 0; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  tfoot td { font-weight: 650; border-top: 1px solid var(--axis); border-bottom: 0; }
+  td .sku { display: block; font-size: 11.5px; color: var(--muted); }
+  td.item { min-width: 170px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px 2px 7px; border-radius: 999px; border: 1px solid var(--line); font-size: 12px; font-weight: 600; white-space: nowrap; background: var(--surface); }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .muted { color: var(--muted); }
+  .table-card { overflow: hidden; }
+  .table-card .card-pad { padding-bottom: 6px; }
+
+  /* SQL */
+  details.sql { margin-top: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  details.sql summary { cursor: pointer; padding: 9px 14px; font-size: 13.5px; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
+  details.sql summary::-webkit-details-marker { display: none; }
+  details.sql summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(-45deg); transition: transform .15s; margin-right: 2px; }
+  details.sql[open] summary::before { transform: rotate(45deg); }
+  details.sql summary { flex-wrap: wrap; }
+  details.sql summary .file { font-weight: 400; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; overflow-wrap: anywhere; }
+  @media (max-width: 520px) { details.sql summary .file { flex-basis: 100%; padding-left: 17px; } }
+  details.sql pre { margin: 0; padding: 12px 14px; max-height: 460px; overflow: auto; background: var(--code-bg); border-top: 1px solid var(--line); font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 4; }
+  details.sql pre .c { color: var(--muted); font-style: italic; }
+  details.sql pre .k { color: var(--accent); font-weight: 600; }
+  details.sql .gh { display: block; padding: 8px 14px; border-top: 1px solid var(--line); font-size: 13px; }
+  details.plain { margin-top: 10px; }
+  details.plain summary { cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--accent); }
+
+  /* Checks and pipeline */
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 18px; font-size: 13.5px; }
+  @media (max-width: 700px) { .checks { grid-template-columns: 1fr; } }
+  .checks li { display: flex; gap: 8px; align-items: flex-start; }
+  .checks svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
+  .pipeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 760px) { .pipeline { grid-template-columns: 1fr 1fr; } }
+  .step { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); font-size: 13.5px; }
+  .step b { display: block; margin-bottom: 2px; }
+  .step code, .muted code { font-size: 12px; }
+  .step span { color: var(--muted); }
+  footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <div>
+      <p class="eyebrow"><span class="dot"></span>Owner's dashboard · PostgreSQL</p>
+      <h1 id="biz-name">Kaveri Imports &amp; Trading</h1>
+      <p class="lede">Twelve months of sales, stock and GST for a mobile-accessories and kitchenware trader in Bhiwandi. Every number on this page comes from a SQL view over the shop's purchase bills and sales invoices. Data to <b id="as-of">30 Sep 2026</b>.</p>
+    </div>
+    <div class="ctas">
+      <a class="btn primary" id="gh-link" href="https://github.com/yashguptayg9013/shop-dashboard">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.72 1.22 1.87.87 2.33.67.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.66 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg>
+        SQL on GitHub
+      </a>
+      <a class="btn" id="looker-link" href="#" hidden>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 14V8m4 6V4m4 10V7m4 7V2"/></svg>
+        Looker Studio version
+      </a>
+    </div>
+  </header>
+
+  <p class="note">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 7.2V11M8 5v.01"/></svg>
+    <span><b>Simulated data.</b> The business, its customers, suppliers and GSTINs are made up. A seeded simulation generated the year of bills, modelling festivals, growing and fading products, and an owner who reorders by feel. The SQL runs unchanged on real purchase and sales registers.</span>
+  </p>
+
+  <section aria-labelledby="h-insights">
+    <div class="section-head"><h2 id="h-insights">Three things the data says</h2></div>
+    <div class="insights">
+      <article class="card insight">
+        <h3>Power banks sell the most and earn the least</h3>
+        <p>They're <strong>17% of sales but 5% of gross profit</strong>. The supplier put prices up 8% in February and the shelf price stayed at ₹999, so the margin fell from <strong>10.6% to 6.9%</strong> (3.4% online, before courier costs).</p>
+        <p class="act">Raising the 10,000 mAh to ₹1,099 would take its counter margin from 8% to 16.5%.</p>
+        <div class="links"><a href="#sales">See the margin chart</a><a href="https://github.com/yashguptayg9013/shop-dashboard/blob/main/sql/insights/1_power_bank_margin.sql">The SQL</a></div>
+      </article>
+      <article class="card insight">
+        <h3>₹73,000 is stuck in four items nobody asks for</h3>
+        <p>Micro-USB chargers and cables, AUX cables and wired earphones: <strong>8% of all stock</strong>, unsold for 4 to 8 months. <strong>₹1.08 lakh</strong> of them was bought this year while sales were falling. The last wired-earphone order (280 units, 13 May) came in when they were selling 60 a month, down from 149 in January.</p>
+        <p class="act">Clear them to repair shops at cost and take them off the reorder list.</p>
+        <div class="links"><a href="#dead">See dead stock</a><a href="https://github.com/yashguptayg9013/shop-dashboard/blob/main/sql/insights/2_dead_stock.sql">The SQL</a></div>
+      </article>
+      <article class="card insight">
+        <h3>Diwali needs ₹5.5 lakh of extra stock, ordered in the next two weeks</h3>
+        <p>On top of everyday reorders, <strong>13 items need festival stock</strong> before the rush starts on 18 October. Brass and copper gift sets come from Moradabad, 9 days away, so they must be ordered by <strong>9 October</strong>; two are already sold out.</p>
+        <p class="act">The everyday reorder levels won't catch this. They're set from last year's sales, which is also why the fast-growing 33W charger was out of stock 21 of the last 180 days (about ₹1 lakh of missed sales).</p>
+        <div class="links"><a href="#diwali">See the Diwali list</a><a href="https://github.com/yashguptayg9013/shop-dashboard/blob/main/sql/insights/3_diwali_prep.sql">The SQL</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-kpis">
+    <div class="section-head"><h2 id="h-kpis">At a glance</h2><p id="kpi-sub" class="muted"></p></div>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section class="section" id="sales" aria-labelledby="h-sales">
+    <div class="section-head">
+      <div><h2 id="h-sales">Sales trend</h2><p>Monthly sales before GST, by channel. Hover or tab through the months for the numbers.</p></div>
+    </div>
+    <div class="card card-pad">
+      <div class="legend" id="sales-legend"></div>
+      <div class="chart" id="sales-chart"></div>
+      <details class="plain"><summary>Show as a table</summary><div class="table-wrap" id="sales-table"></div></details>
+    </div>
+    <div class="grid-2" style="margin-top:14px">
+      <div class="card card-pad">
+        <h3>Where the profit comes from</h3>
+        <p class="sub">Each category's share of sales and of gross profit, last 12 months</p>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Share of sales</span><span><i style="background:var(--s2)"></i>Share of gross profit</span></div>
+        <div class="shares" id="shares"></div>
+      </div>
+      <div class="card card-pad">
+        <h3>Gross margin by month</h3>
+        <p class="sub">Power banks against the whole shop. Cost is the latest supplier bill's rate.</p>
+        <div class="legend"><span><i class="line" style="background:var(--s1)"></i>Whole shop</span><span><i class="line" style="background:var(--s2)"></i>Power banks</span></div>
+        <div class="chart" id="margin-chart"></div>
+      </div>
+    </div>
+    <div id="sql-sales"></div>
+  </section>
+
+  <section class="section" id="reorder" aria-labelledby="h-reorder">
+    <div class="section-head">
+      <div><h2 id="h-reorder">Reorder alerts</h2><p>Pace is what sold in the last 28 days, divided by the days the item was actually in stock. Order when stock won't last the supplier's lead time plus a week. Quantities cover the lead time plus 30 days, rounded up to the supplier's pack size.</p></div>
+    </div>
+    <div class="card table-card"><div class="table-wrap" id="reorder-table"></div></div>
+    <div class="card table-card" style="margin-top:14px">
+      <div class="card-pad"><h3>Ran out in the last 180 days</h3><p class="sub">Missed sales = days out of stock × the item's pace on in-stock days. Treat it as the upper end: some customers wait.</p></div>
+      <div class="table-wrap" id="stockout-table"></div>
+    </div>
+    <div id="sql-reorder"></div>
+  </section>
+
+  <section class="section" id="diwali" aria-labelledby="h-diwali">
+    <div class="section-head">
+      <div><h2 id="h-diwali">Diwali prep</h2><p id="diwali-sub"></p></div>
+    </div>
+    <div class="card table-card"><div class="table-wrap" id="diwali-table"></div></div>
+    <div id="sql-diwali"></div>
+  </section>
+
+  <section class="section" id="dead" aria-labelledby="h-dead">
+    <div class="section-head">
+      <div><h2 id="h-dead">Dead stock</h2><p>Dead: no sale in 90 days. Slow: more than six months of stock at the current pace. Seasonal: a festival item with stock left over, so hold it for the next festival rather than discounting it.</p></div>
+    </div>
+    <div class="card table-card"><div class="table-wrap" id="dead-table"></div></div>
+    <div id="sql-dead"></div>
+  </section>
+
+  <section class="section" id="gst" aria-labelledby="h-gst">
+    <div class="section-head">
+      <div><h2 id="h-gst">Monthly GST summary</h2><p>Laid out like GSTR-3B: tax collected on sales, input tax credit from purchase bills, and the cash left to pay. Unused credit carries forward. CGST, SGST and IGST credit are pooled here, so treat it as an estimate for your CA.</p></div>
+    </div>
+    <div class="card card-pad">
+      <div class="legend"><span><i style="background:var(--s1)"></i>GST on sales</span><span><i style="background:var(--s2)"></i>Input tax credit</span><span><i style="background:var(--s3)"></i>Cash payable</span></div>
+      <div class="chart" id="gst-chart"></div>
+      <p class="sub" style="margin:8px 0 0">October 2025 looks high because the Diwali stock was bought, and its credit claimed, in September, before this data starts.</p>
+    </div>
+    <div class="card table-card" style="margin-top:14px"><div class="table-wrap" id="gst-table"></div></div>
+    <details class="plain"><summary id="hsn-summary">HSN summary for the latest month (GSTR-1 table 12)</summary><div class="card table-card" style="margin-top:10px"><div class="table-wrap" id="hsn-table"></div></div></details>
+    <div id="sql-gst"></div>
+  </section>
+
+  <section class="section" id="products" aria-labelledby="h-products">
+    <div class="section-head">
+      <div><h2 id="h-products">Products: ABC analysis</h2><p>A items make the first 80% of sales and should never run out. C items make the last 5%. Where the profit rank sits far below the sales rank, the item is busy but not earning.</p></div>
+    </div>
+    <div class="card table-card"><div class="table-wrap" id="product-table"></div></div>
+    <div id="sql-products"></div>
+  </section>
+
+  <section class="section" id="how" aria-labelledby="h-how">
+    <div class="section-head"><div><h2 id="h-how">How it's built</h2><p>Stock is never typed in. It's opening stock plus purchases minus sales, so it can't drift from the bills.</p></div></div>
+    <div class="pipeline">
+      <div class="step"><b>1. Bills</b><span>Purchase bills read by <a href="https://yashguptayg9013.github.io/bill-reader/">Bill Reader</a>, and sales invoices from the billing app, as CSVs.</span></div>
+      <div class="step"><b>2. PostgreSQL</b><span>10 tables with keys and checks (<code>01_schema.sql</code>), loaded with <code>\copy</code>.</span></div>
+      <div class="step"><b>3. SQL views</b><span>15 views, one per question: CTEs, window functions, a recursive GST ledger.</span></div>
+      <div class="step"><b>4. Dashboards</b><span>This page, and Looker Studio, both read the views' output.</span></div>
+    </div>
+    <div class="card card-pad" style="margin-top:14px">
+      <h3>Data checks</h3>
+      <p class="sub">The build stops if any of these fail. A dashboard is only as good as the bills under it.</p>
+      <ul class="checks" id="checks"></ul>
+    </div>
+    <div id="sql-checks"></div>
+  </section>
+
+  <footer>
+    <span>Built by Yash Gupta with PostgreSQL 17, plain HTML and SVG.</span>
+    <span><a href="https://github.com/yashguptayg9013/shop-dashboard">Source and SQL</a></span>
+  </footer>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

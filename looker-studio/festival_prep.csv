@@ -1,0 +1,15 @@
+product_id,sku,product,category,supplier,festival,festival_date,rush_start,rush_length,lead_time_days,is_seasonal,rush_uplift,units_last_rush,per_day_now,stock_now,festival_qty,festival_value,order_by
+28,FST-THL,Brass Pooja Thali Set,Festive & gifting,Moradabad Metal Crafts,Diwali,2026-11-08,2026-10-18,22,9,t,17.2,145,0.0,0,160,54400,2026-10-09
+27,FST-CPB,Copper Bottle Gift Set,Festive & gifting,Moradabad Metal Crafts,Diwali,2026-11-08,2026-10-18,22,9,t,11.5,92,0.0,0,110,52800,2026-10-09
+26,FST-DIYA,Brass Diya Set (5 pc),Festive & gifting,Moradabad Metal Crafts,Diwali,2026-11-08,2026-10-18,22,9,t,18.3,136,0.4,239,0,0,2026-10-09
+21,KIT-JAR,Glass Storage Jar 1.5L,Kitchenware,Northline Home Goods Pvt. Ltd.,Diwali,2026-11-08,2026-10-18,22,8,f,1.6,185,5.8,133,84,11760,2026-10-10
+14,AUD-NB5,Neckband Earphones N5,Audio,Zenith Mobile Gear LLP,Diwali,2026-11-08,2026-10-18,22,6,f,1.6,194,4.6,199,70,26600,2026-10-12
+16,AUD-SPK,Bluetooth Speaker Mini,Audio,Zenith Mobile Gear LLP,Diwali,2026-11-08,2026-10-18,22,6,f,1.8,90,2.5,35,45,23400,2026-10-12
+12,ACC-STRP,Smartwatch Strap 22mm,Accessories,Zenith Mobile Gear LLP,Diwali,2026-11-08,2026-10-18,22,6,f,1.5,125,7.7,86,100,6000,2026-10-12
+4,CHG-CAR,Car Charger Dual USB,Accessories,Zenith Mobile Gear LLP,Diwali,2026-11-08,2026-10-18,22,6,f,1.5,98,3.4,50,40,6000,2026-10-12
+24,STL-DIN,Steel Dinner Set (24 pc),Kitchenware,Om Sai Steel Centre,Diwali,2026-11-08,2026-10-18,22,4,f,2.4,49,1.1,14,36,54810,2026-10-14
+25,STL-KDI,Steel Kadai 2.5L,Kitchenware,Om Sai Steel Centre,Diwali,2026-11-08,2026-10-18,22,4,f,1.7,153,4.8,54,78,31941,2026-10-14
+13,AUD-TWS2,TWS Earbuds Model X2,Audio,Shree Ganesh Electronics Traders,Diwali,2026-11-08,2026-10-18,22,3,f,1.7,332,11.4,150,180,103212,2026-10-15
+17,PWR-10K,Power Bank 10000mAh,Power banks,Shree Ganesh Electronics Traders,Diwali,2026-11-08,2026-10-18,22,3,f,1.5,315,10.7,79,120,93312,2026-10-15
+1,CHG-C20,USB-C Fast Charger 20W,Chargers,Shree Ganesh Electronics Traders,Diwali,2026-11-08,2026-10-18,22,3,f,1.5,527,26.6,149,300,73500,2026-10-15
+11,ACC-STD,Aluminium Phone Stand,Accessories,Shree Ganesh Electronics Traders,Diwali,2026-11-08,2026-10-18,22,3,f,1.7,195,5.7,64,100,9500,2026-10-15

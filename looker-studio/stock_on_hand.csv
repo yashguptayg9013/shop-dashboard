@@ -1,0 +1,29 @@
+product_id,sku,product,category,supplier,qty,unit_cost,stock_value,sold_30d,sold_90d,last_sale,days_since_last_sale,last_purchase,days_of_cover
+5,CBL-C1,Braided USB-C Cable 1m,Cables,Shree Ganesh Electronics Traders,1658,68.50,113573.00,2018,6207,2026-09-30,0,2026-09-25,24
+18,PWR-20K,Power Bank 20000mAh,Power banks,Zenith Mobile Gear LLP,70,1242.00,86940.00,56,253,2026-09-30,0,2026-09-18,25
+13,AUD-TWS2,TWS Earbuds Model X2,Audio,Shree Ganesh Electronics Traders,150,573.40,86010.00,374,1027,2026-09-30,0,2026-09-25,13
+14,AUD-NB5,Neckband Earphones N5,Audio,Zenith Mobile Gear LLP,199,380.00,75620.00,106,417,2026-09-30,0,2026-09-07,43
+17,PWR-10K,Power Bank 10000mAh,Power banks,Shree Ganesh Electronics Traders,79,777.60,61430.40,306,962,2026-09-30,0,2026-09-10,7
+26,FST-DIYA,Brass Diya Set (5 pc),Festive & gifting,Moradabad Metal Crafts,239,210.00,50190.00,35,36,2026-09-30,0,,598
+23,STL-LBX,Steel Lunch Box 3-Tier,Kitchenware,Om Sai Steel Centre,169,273.00,46137.00,283,724,2026-09-30,0,2026-09-22,21
+2,CHG-C33,USB-C Fast Charger 33W,Chargers,Shree Ganesh Electronics Traders,113,390.00,44070.00,254,742,2026-09-29,1,2026-09-25,14
+20,KIT-MUG,Ceramic Coffee Mug 350ml,Kitchenware,Northline Home Goods Pvt. Ltd.,531,72.50,38497.50,824,2115,2026-09-30,0,2026-09-26,23
+19,KIT-BTL1,Stainless Steel Water Bottle 1L,Kitchenware,Northline Home Goods Pvt. Ltd.,198,185.00,36630.00,284,823,2026-09-29,1,2026-09-19,22
+1,CHG-C20,USB-C Fast Charger 20W,Chargers,Shree Ganesh Electronics Traders,149,245.00,36505.00,885,2395,2026-09-30,0,2026-09-17,6
+6,CBL-LT1,USB-C to Lightning Cable 1m,Cables,Shree Ganesh Electronics Traders,252,140.00,35280.00,208,674,2026-09-30,0,2026-09-28,34
+15,AUD-WRD,Wired Earphones 3.5mm,Audio,Zenith Mobile Gear LLP,341,85.00,28985.00,0,0,2026-06-04,118,2026-05-13,
+25,STL-KDI,Steel Kadai 2.5L,Kitchenware,Om Sai Steel Centre,54,409.50,22113.00,139,429,2026-09-30,0,2026-09-09,11
+24,STL-DIN,Steel Dinner Set (24 pc),Kitchenware,Om Sai Steel Centre,14,1522.50,21315.00,52,103,2026-09-30,0,2026-09-26,12
+8,CBL-AUX,3.5mm AUX Cable 1m,Cables,Zenith Mobile Gear LLP,758,28.00,21224.00,0,0,2026-01-15,258,,
+21,KIT-JAR,Glass Storage Jar 1.5L,Kitchenware,Northline Home Goods Pvt. Ltd.,133,140.00,18620.00,207,521,2026-09-30,0,2026-09-23,23
+16,AUD-SPK,Bluetooth Speaker Mini,Audio,Zenith Mobile Gear LLP,35,520.00,18200.00,94,228,2026-09-30,0,2026-09-14,14
+10,PRT-CASE,Silicone Phone Case (assorted),Phone protection,Shree Ganesh Electronics Traders,371,45.00,16695.00,1540,4205,2026-09-30,0,2026-09-07,8
+7,CBL-MU1,Micro-USB Cable 1m,Cables,Shree Ganesh Electronics Traders,452,32.00,14464.00,0,0,2026-05-10,143,2026-02-23,
+9,PRT-TG,Tempered Glass Screen Guard,Phone protection,Shree Ganesh Electronics Traders,714,18.00,12852.00,1885,5640,2026-09-30,0,2026-09-03,11
+3,CHG-MU10,Micro-USB Charger 10W,Chargers,Shree Ganesh Electronics Traders,69,120.00,8280.00,0,0,2026-03-24,190,2026-01-12,
+4,CHG-CAR,Car Charger Dual USB,Accessories,Zenith Mobile Gear LLP,50,150.00,7500.00,113,304,2026-09-30,0,2026-09-09,15
+11,ACC-STD,Aluminium Phone Stand,Accessories,Shree Ganesh Electronics Traders,64,95.00,6080.00,146,512,2026-09-30,0,2026-09-07,11
+12,ACC-STRP,Smartwatch Strap 22mm,Accessories,Zenith Mobile Gear LLP,86,60.00,5160.00,141,691,2026-09-30,0,2026-08-28,11
+22,KIT-TWL,Cotton Kitchen Towels (Set of 3),Kitchenware,Northline Home Goods Pvt. Ltd.,25,120.00,3000.00,233,546,2026-09-30,0,2026-09-09,4
+27,FST-CPB,Copper Bottle Gift Set,Festive & gifting,Moradabad Metal Crafts,0,480.00,0.00,0,0,2026-02-02,240,,
+28,FST-THL,Brass Pooja Thali Set,Festive & gifting,Moradabad Metal Crafts,0,340.00,0.00,0,0,2026-07-02,90,,
