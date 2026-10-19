@@ -5,7 +5,7 @@
   "use strict";
   const D = window.DASH;
   const REPO = "https://github.com/yashguptayg9013/shop-dashboard/blob/main/";
-  const LOOKER_URL = ""; // paste the Looker Studio report link here to show the button
+  const LOOKER_URL = "https://lookerstudio.google.com/reporting/af1a9c31-0a81-47e9-befe-b813f2ecc85f"; // the Looker Studio (Data Studio) version of this dashboard
 
   // ?theme=light|dark forces a theme (for embedding)
   const theme = new URLSearchParams(location.search).get("theme");

@@ -1,6 +1,6 @@
 # Shop Owner Dashboard: SQL + PostgreSQL
 
-**[Live dashboard](https://yashguptayg9013.github.io/shop-dashboard/)** · PostgreSQL 17 · SQL views · Looker Studio-ready CSVs
+**[Live dashboard](https://yashguptayg9013.github.io/shop-dashboard/)** · **[Looker Studio version](https://lookerstudio.google.com/reporting/af1a9c31-0a81-47e9-befe-b813f2ecc85f)** · PostgreSQL 17 · SQL views
 
 ![The dashboard](docs/images/dashboard.png)
 
@@ -92,7 +92,9 @@ Replace the CSVs in `data/` with exports from your own registers, keeping the co
 
 ## Looker Studio
 
-`looker-studio/` has every view as a CSV, plus `sales_lines.csv` (one row per sale line) for Looker Studio's own filters and charts. [`looker-studio/README.md`](looker-studio/README.md) walks through building the report in about 30 minutes.
+**[Open the Looker Studio report](https://lookerstudio.google.com/reporting/af1a9c31-0a81-47e9-befe-b813f2ecc85f)** (Looker Studio is now called Data Studio). It has three pages: sales and margin (scorecards, monthly sales by channel, margin by category), stock and Diwali (reorder alerts, dead stock, the Diwali buy list) and GST (monthly output tax, input credit and cash payable).
+
+It reads the CSVs in `looker-studio/`, which are the output of the PostgreSQL views, plus `sales_lines.csv` (one row per sale line) for Looker Studio's own filters and date range. [`looker-studio/README.md`](looker-studio/README.md) explains how it was built and how to refresh it.
 
 ## Assumptions and limits
 
